@@ -16,35 +16,7 @@ window.addEvent('domready', function() {
 
   var hooks = {
     'form[data-remote="true"]:submit': handleRemote,
-    'a[data-remote="true"], input[data-remote="true"], input[data-remote-submit="true"]:click': handleRemote,
-    'script[data-periodical="true"]:domready': function() {
-      var frequency = this.get('data-frequency') ? this.get('data-frequency').toFloat() : 10;
-
-      var request = new Request.Rails(this);
-      request.send.periodical(frequency * 1000, request);
-    },
-    'script[data-observe="true"]:domready': function() {
-      var observed = document.id(this.get('data-observed')),
-          frequency = this.get('data-frequency') ? this.get('data-frequency').toFloat() : 10,
-          observesForm = observed.get('tag') == 'form',
-          value = observesForm ? observed.toQueryString() : observed.get('value'),
-          request = new Request.Rails(observed, {
-            observer: this,
-            update: document.id(this.get('data-update-success'))
-          });
-
-      var observe = function() {
-        var newValue = observesForm ? observed.toQueryString() : observed.get('value');
-
-        if(newValue !== value) {
-          value = newValue;
-          this.fireEvent('ajax:observe');
-          request.send();
-        }
-      };
-
-      observe.periodical(frequency * 1000, this);
-    }
+    'a[data-remote="true"], input[data-remote="true"], input[data-remote-submit="true"]:click': handleRemote
   };
 
   for(var key in hooks) {
@@ -62,8 +34,7 @@ window.addEvent('domready', function() {
 
     options: {
       update: null,
-      position: null,
-      observer: null
+      position: null
     },
 
     initialize: function(element, options) {
