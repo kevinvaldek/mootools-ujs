@@ -14,17 +14,8 @@ window.addEvent('domready', function() {
     this.railsRequest = new Request.Rails(this).send();
   };
 
-  var hooks = {
-    'form[data-remote="true"]:submit': handleRemote,
-    'a[data-remote="true"], input[data-remote="true"], input[data-remote-submit="true"]:click': handleRemote
-  };
-
-  for(var key in hooks) {
-    if(hooks.hasOwnProperty(key)) {
-      var split = key.split(':');
-      $$(split[0]).addEvent(split[1], hooks[key]);
-    }
-  }
+  $$('form[data-remote="true"]').addEvent('submit', handleRemote);
+  $$('a[data-remote="true"], input[data-remote="true"], input[data-remote-submit="true"]').addEvent('click', handleRemote);
 });
 
 (function($) {
