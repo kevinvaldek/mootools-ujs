@@ -15,17 +15,6 @@ window.addEvent('domready', function() {
   var hooks = {
     'form[data-remote="true"]:submit': handleRemote,
     'a[data-remote="true"], input[data-remote="true"], input[data-remote-submit="true"]:click': handleRemote,
-    'a[data-popup], input[type="button"][data-popup]:click': function(e) {
-      e.preventDefault();
-      var url = this.get('data-url') || this.get('href'),
-          options = this.get('data-popup');
-
-      if(options === 'true') {
-        window.open(url);
-      } else {
-        window.open(url, options);
-      }
-    },
     'script[data-periodical="true"]:domready': function() {
       var frequency = this.get('data-frequency') ? this.get('data-frequency').toFloat() : 10;
 
