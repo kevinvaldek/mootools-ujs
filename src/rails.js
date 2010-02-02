@@ -71,7 +71,6 @@ window.addEvent('domready', function() {
       this.parent($merge({
         method: this.el.get('method') || this.el.get('data-method') || 'get',
         url: this.el.get('action') || this.el.get('href'),
-        async: this.el.get('data-remote-type') !== 'synchronous',
         update: $(this.el.get('data-update-success')),
         position: this.el.get('data-update-position')
       }, options));
