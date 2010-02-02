@@ -68,10 +68,6 @@ window.addEvent('domready', function() {
 
     initialize: function(element, options) {
       this.el = element;
-      if(!this.conditionMet()) {
-        return;
-      }
-
       this.parent($merge({
         method: this.el.get('method') || this.el.get('data-method') || 'get',
         url: this.el.get('action') || this.el.get('href'),
@@ -157,16 +153,7 @@ window.addEvent('domready', function() {
           });
         });
       }
-    },
-
-    conditionMet: function() {
-      var condition = this.el.get('data-condition');
-      if(condition) {
-        return eval(condition);
-      }
-      return true;
     }
-
   });
 
 })(document.id);
