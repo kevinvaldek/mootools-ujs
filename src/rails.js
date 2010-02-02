@@ -1,7 +1,9 @@
 /**
  * Rails unobtrusive JS proof of concept.
  *
- * TODO: Update driver with the latest API (like removing legacy support)
+ * TODO: Update driver with the latest API
+ *    - Encapsulate ajax:before to stop the request on falsy return values
+ *
  * TODO: Tests
  */
 
@@ -86,8 +88,10 @@ window.addEvent('domready', function() {
       if(!this.checkConfirm()) {
         return;
       }
-      this.setData();
       this.el.fireEvent('ajax:before');
+      if(this.el.get('tag') == 'form') {
+        this.options.data = this.el;
+      }
       this.parent(options);
       this.el.fireEvent('ajax:after', this.xhr);
     },
@@ -152,24 +156,6 @@ window.addEvent('domready', function() {
             disabled: false
           });
         });
-      }
-    },
-
-    setData: function() {
-      if(this.el.get('data-submit')) {
-        this.options.data = $(this.el.get('data-submit'));
-      }
-      else if(this.options.observer && this.options.observer.get('data-with')) {
-        var observerWith = this.options.observer.get('data-with'),
-            value = this.el.get('tag') == 'form' ? this.el.toQueryString() : this.el.get('value');
-
-        this.options.data = observerWith + '=' + value;
-      }
-      else if(this.el.get('tag') == 'form') {
-        this.options.data = this.el;
-      }
-      else if(this.el.get('tag') == 'input') {
-        this.options.data = this.el.getParent('form');
       }
     },
 
