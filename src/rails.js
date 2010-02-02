@@ -62,31 +62,6 @@ window.addEvent('domready', function() {
       $$(split[0]).addEvent(split[1], hooks[key]);
     }
   }
-
-  /**
-   * Rails 2.x compatibility.
-   */
-  var compatEval = function(el, action) {
-    var js = el.get('data-on' + action);
-    if(js) {
-      eval(js);
-    }
-  };
-
-  $$('form[data-remote="true"], a[data-remote="true"], input[data-remote="true"], script[data-observe="true"]').each(function(el) {
-    ['before', 'after', 'loading', 'loaded', 'complete', 'success', 'failure', 'observe'].each(function(action) {
-      el.addEvent('rails:' + action, function() {
-        compatEval(el, action);
-      });
-    });
-
-    el.addEvent('rails:complete', function(xhr) {
-      compatEval(el, xhr.status);
-      if(el.get('data-periodical') === 'true') {
-        compatEval(el, 'observe');
-      }
-    });
-  });
 });
 
 (function($) {
@@ -194,10 +169,6 @@ window.addEvent('domready', function() {
     setData: function() {
       if(this.el.get('data-submit')) {
         this.options.data = $(this.el.get('data-submit'));
-      }
-      else if(this.el.get('data-with')) {
-        // Rails 2.x compat. eval (deprecated)
-        this.options.data = eval(this.el.get('data-with'));
       }
       else if(this.options.observer && this.options.observer.get('data-with')) {
         var observerWith = this.options.observer.get('data-with'),
