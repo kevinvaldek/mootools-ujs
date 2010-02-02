@@ -89,11 +89,11 @@ window.addEvent('domready', function() {
       this.setData();
       this.el.fireEvent('ajax:before');
       this.parent(options);
+      this.el.fireEvent('ajax:after', this.xhr);
     },
 
     addRailsEvents: function() {
       this.addEvent('request', function() {
-        this.el.fireEvent('ajax:after', this.xhr);
         this.el.fireEvent('ajax:loading', this.xhr);
       });
 
