@@ -36,7 +36,7 @@ window.addEvent('domready', function() {
 
         if(newValue !== value) {
           value = newValue;
-          this.fireEvent('rails:observe');
+          this.fireEvent('ajax:observe');
           request.send();
         }
       };
@@ -87,18 +87,18 @@ window.addEvent('domready', function() {
         return;
       }
       this.setData();
-      this.el.fireEvent('rails:before');
+      this.el.fireEvent('ajax:before');
       this.parent(options);
     },
 
     addRailsEvents: function() {
       this.addEvent('request', function() {
-        this.el.fireEvent('rails:after', this.xhr);
-        this.el.fireEvent('rails:loading', this.xhr);
+        this.el.fireEvent('ajax:after', this.xhr);
+        this.el.fireEvent('ajax:loading', this.xhr);
       });
 
       this.addEvent('success', function(responseText) {
-        this.el.fireEvent('rails:success', this.xhr);
+        this.el.fireEvent('ajax:success', this.xhr);
 
         if(this.options.update) {
           if(this.options.position) {
@@ -112,12 +112,12 @@ window.addEvent('domready', function() {
       });
 
       this.addEvent('complete', function() {
-        this.el.fireEvent('rails:complete', this.xhr);
-        this.el.fireEvent('rails:loaded', this.xhr);
+        this.el.fireEvent('ajax:complete', this.xhr);
+        this.el.fireEvent('ajax:loaded', this.xhr);
       });
 
       this.addEvent('failure', function() {
-        this.el.fireEvent('rails:failure', this.xhr);
+        this.el.fireEvent('ajax:failure', this.xhr);
       });
 
       this.setDisableWith();
@@ -141,12 +141,12 @@ window.addEvent('domready', function() {
       if(disableWith) {
         var enableWith = button.get('value');
 
-        this.el.addEvent('rails:before', function() {
+        this.el.addEvent('ajax:before', function() {
           button.set({
             value: disableWith,
             disabled: true
           });
-        }).addEvent('rails:complete', function() {
+        }).addEvent('ajax:complete', function() {
           button.set({
             value: enableWith,
             disabled: false
