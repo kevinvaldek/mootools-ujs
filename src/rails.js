@@ -23,18 +23,11 @@ window.addEvent('domready', function() {
 
     Extends: Request,
 
-    options: {
-      update: null,
-      position: null
-    },
-
     initialize: function(element, options) {
       this.el = element;
       this.parent($merge({
         method: this.el.get('method') || this.el.get('data-method') || 'get',
-        url: this.el.get('action') || this.el.get('href'),
-        update: $(this.el.get('data-update-success')),
-        position: this.el.get('data-update-position')
+        url: this.el.get('action') || this.el.get('href')
       }, options));
       this.headers.Accept = '*/*';
 
@@ -58,18 +51,8 @@ window.addEvent('domready', function() {
         this.el.fireEvent('ajax:loading', this.xhr);
       });
 
-      this.addEvent('success', function(responseText) {
+      this.addEvent('success', function() {
         this.el.fireEvent('ajax:success', this.xhr);
-
-        if(this.options.update) {
-          if(this.options.position) {
-            new Element('div', {
-              html: responseText
-            }).inject(this.options.update, this.options.position);
-          } else {
-            this.options.update.set('html', responseText);
-          }
-        }
       });
 
       this.addEvent('complete', function() {
