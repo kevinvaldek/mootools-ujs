@@ -3,6 +3,8 @@
  *
  * TODO: Update driver with the latest API
  *    - Encapsulate ajax:before to stop the request on falsy return values
+ *    - When ajax:before can stop the request from being sent,
+ *      add data-confirm, and move out data-disable-with from Request.Rails.
  *
  * TODO: Tests
  */
