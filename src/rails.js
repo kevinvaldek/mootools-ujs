@@ -8,6 +8,15 @@
  */
 
 window.addEvent('domready', function() {
+  var getCsrf = function(name) {
+    var meta = document.getElement('meta[name=csrf-' + name + ']');
+    return (meta ? meta.get('content') : null);
+  };
+
+  var csrf = {
+    token: getCsrf('token'),
+    param: getCsrf('param')
+  };
 
   var handleRemote = function(e) {
     e.preventDefault();
@@ -16,6 +25,29 @@ window.addEvent('domready', function() {
 
   $$('form[data-remote="true"]').addEvent('submit', handleRemote);
   $$('a[data-remote="true"], input[data-remote="true"], input[data-remote-submit="true"]').addEvent('click', handleRemote);
+  $$('a[data-method][data-remote!=true]').addEvent('click', function(e) {
+    e.preventDefault();
+
+    var form = new Element('form', {
+      method: 'post',
+      action: this.get('href'),
+      styles: { display: 'none' }
+    }).inject(this, 'after');
+    
+    var methodInput = new Element('input', {
+      type: 'hidden',
+      name: '_method',
+      value: this.get('data-method')
+    });
+
+    var csrfInput = new Element('input', {
+      type: 'hidden',
+      name: csrf.param,
+      value: csrf.token
+    });
+
+    form.adopt(methodInput, csrfInput).submit();
+  });
 });
 
 (function($) {
