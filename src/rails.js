@@ -26,7 +26,7 @@ window.addEvent('domready', function() {
   };
 
   $$('form[data-remote="true"]').addEvent('submit', handleRemote);
-  $$('a[data-remote="true"], input[data-remote="true"], input[data-remote-submit="true"]').addEvent('click', handleRemote);
+  $$('a[data-remote="true"], input[data-remote="true"]').addEvent('click', handleRemote);
   $$('a[data-method][data-remote!=true]').addEvent('click', function(e) {
     e.preventDefault();
 
