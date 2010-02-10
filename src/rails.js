@@ -4,7 +4,7 @@
  * TODO: Update driver with the latest API
  *    - Encapsulate ajax:before to stop the request on falsy return values
  *    - When ajax:before can stop the request from being sent,
- *      add data-confirm, and move out data-disable-with from Request.Rails.
+ *      and move out data-disable-with from Request.Rails.
  *
  * TODO: Tests
  */
@@ -20,9 +20,20 @@ window.addEvent('domready', function() {
     param: getCsrf('param')
   };
 
+  var confirmed = function(el) {
+    var confirmMessage = el.get('data-confirm');
+    if(confirmMessage && !confirm(confirmMessage)) {
+      return false;
+    }
+    return true;
+  };
+
   var handleRemote = function(e) {
     e.preventDefault();
-    this.railsRequest = new Request.Rails(this).send();
+
+    if(confirmed(this)) {
+      new Request.Rails(this).send();
+    }
   };
 
   $$('form[data-remote="true"]').addEvent('submit', handleRemote);
@@ -35,7 +46,7 @@ window.addEvent('domready', function() {
       action: this.get('href'),
       styles: { display: 'none' }
     }).inject(this, 'after');
-    
+
     var methodInput = new Element('input', {
       type: 'hidden',
       name: '_method',
@@ -69,9 +80,6 @@ window.addEvent('domready', function() {
     },
 
     send: function(options) {
-      if(!this.checkConfirm()) {
-        return;
-      }
       this.el.fireEvent('ajax:before');
       if(this.el.get('tag') == 'form') {
         this.options.data = this.el;
@@ -99,14 +107,6 @@ window.addEvent('domready', function() {
       });
 
       this.setDisableWith();
-    },
-
-    checkConfirm: function() {
-      var confirmMessage = this.el.get('data-confirm');
-      if(confirmMessage && !confirm(confirmMessage)) {
-        return false;
-      }
-      return true;
     },
 
     setDisableWith: function() {
