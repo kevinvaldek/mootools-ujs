@@ -2,9 +2,7 @@
  * Rails unobtrusive JS proof of concept.
  *
  * TODO: Update driver with the latest API
- *    - Encapsulate ajax:before to stop the request on falsy return values
- *    - When ajax:before can stop the request from being sent,
- *      and move out data-disable-with from Request.Rails.
+ *     - Encapsulate ajax:before to stop the request on falsy return values.
  *
  * TODO: Tests
  */
@@ -28,11 +26,31 @@ window.addEvent('domready', function() {
     return true;
   };
 
+  var disable = function(el, run) {
+    var button = el.get('data-disable-with') ? el : el.getElement('[data-disable-with]');
+
+    if(button) {
+      var enableWith = button.get('value');
+      el.addEvent('ajax:complete', function() {
+        button.set({
+          value: enableWith,
+          disabled: false
+        });
+      });
+      button.set({
+        value: button.get('data-disable-with'),
+        disabled: true
+      });
+    }
+    run();
+  };
+
   var handleRemote = function(e) {
     e.preventDefault();
 
     if(confirmed(this)) {
-      new Request.Rails(this).send();
+      var request = new Request.Rails(this);
+      disable(this, request.send.bind(request));
     }
   };
 
@@ -105,33 +123,8 @@ window.addEvent('domready', function() {
       this.addEvent('failure', function() {
         this.el.fireEvent('ajax:failure', this.xhr);
       });
-
-      this.setDisableWith();
-    },
-
-    setDisableWith: function() {
-      var button = this.el.get('data-disable-with') ? this.el : this.el.getElement('[data-disable-with]');
-      if(!button) {
-        return;
-      }
-
-      var disableWith = button.get('data-disable-with');
-      if(disableWith) {
-        var enableWith = button.get('value');
-
-        this.el.addEvent('ajax:before', function() {
-          button.set({
-            value: disableWith,
-            disabled: true
-          });
-        }).addEvent('ajax:complete', function() {
-          button.set({
-            value: enableWith,
-            disabled: false
-          });
-        });
-      }
     }
+
   });
 
 })(document.id);
