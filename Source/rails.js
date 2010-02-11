@@ -1,10 +1,20 @@
-/**
- * Rails unobtrusive JS driver for Rails 3.
- *
- * TODO: Update driver with the latest API
- *     - Encapsulate ajax:before to stop the request on falsy return values.
- *
- */
+/*
+---
+description: A MooTools driver for the Ruby on Rails 3 unobtrusive JavaScript API.
+
+license: MIT-style
+
+authors:
+- Kevin Valdek
+
+requires:
+  core/1.2.4: '*'
+
+provides:
+  - Rails 3 MooTools driver
+
+...
+*/
 
 window.addEvent('domready', function() {
 
