@@ -8,54 +8,14 @@
  */
 
 window.addEvent('domready', function() {
-  var getCsrf = function(name) {
-    var meta = document.getElement('meta[name=csrf-' + name + ']');
-    return (meta ? meta.get('content') : null);
+
+  rails.csrf = {
+    token: rails.getCsrf('token'),
+    param: rails.getCsrf('param')
   };
 
-  var csrf = {
-    token: getCsrf('token'),
-    param: getCsrf('param')
-  };
-
-  var confirmed = function(el) {
-    var confirmMessage = el.get('data-confirm');
-    if(confirmMessage && !confirm(confirmMessage)) {
-      return false;
-    }
-    return true;
-  };
-
-  var disable = function(el, run) {
-    var button = el.get('data-disable-with') ? el : el.getElement('[data-disable-with]');
-
-    if(button) {
-      var enableWith = button.get('value');
-      el.addEvent('ajax:complete', function() {
-        button.set({
-          value: enableWith,
-          disabled: false
-        });
-      });
-      button.set({
-        value: button.get('data-disable-with'),
-        disabled: true
-      });
-    }
-    run();
-  };
-
-  var handleRemote = function(e) {
-    e.preventDefault();
-
-    if(confirmed(this)) {
-      var request = new Request.Rails(this);
-      disable(this, request.send.bind(request));
-    }
-  };
-
-  $$('form[data-remote="true"]').addEvent('submit', handleRemote);
-  $$('a[data-remote="true"], input[data-remote="true"]').addEvent('click', handleRemote);
+  $$('form[data-remote="true"]').addEvent('submit', rails.handleRemote);
+  $$('a[data-remote="true"], input[data-remote="true"]').addEvent('click', rails.handleRemote);
   $$('a[data-method][data-remote!=true]').addEvent('click', function(e) {
     e.preventDefault();
 
@@ -73,8 +33,8 @@ window.addEvent('domready', function() {
 
     var csrfInput = new Element('input', {
       type: 'hidden',
-      name: csrf.param,
-      value: csrf.token
+      name: rails.csrf.param,
+      value: rails.csrf.token
     });
 
     form.adopt(methodInput, csrfInput).submit();
@@ -82,6 +42,50 @@ window.addEvent('domready', function() {
 });
 
 (function($) {
+
+  window.rails = {
+    getCsrf: function(name) {
+      var meta = document.getElement('meta[name=csrf-' + name + ']');
+      return (meta ? meta.get('content') : null);
+    },
+
+    confirmed: function(el) {
+      var confirmMessage = el.get('data-confirm');
+      if(confirmMessage && !confirm(confirmMessage)) {
+        return false;
+      }
+      return true;
+    },
+
+    disable: function(el) {
+      var button = el.get('data-disable-with') ? el : el.getElement('[data-disable-with]');
+
+      if(button) {
+        var enableWith = button.get('value');
+        el.addEvent('ajax:complete', function() {
+          button.set({
+            value: enableWith,
+            disabled: false
+          });
+        });
+        button.set({
+          value: button.get('data-disable-with'),
+          disabled: true
+        });
+      }
+    },
+
+    handleRemote: function(e) {
+      e.preventDefault();
+
+      if(rails.confirmed(this)) {
+        this.request = new Request.Rails(this);
+        rails.disable(this);
+        this.request.send();
+      }
+    }
+  };
+
   Request.Rails = new Class({
 
     Extends: Request,
