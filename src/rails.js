@@ -1,10 +1,9 @@
 /**
- * Rails unobtrusive JS proof of concept.
+ * Rails unobtrusive JS driver for Rails 3.
  *
  * TODO: Update driver with the latest API
  *     - Encapsulate ajax:before to stop the request on falsy return values.
  *
- * TODO: Tests
  */
 
 window.addEvent('domready', function() {
