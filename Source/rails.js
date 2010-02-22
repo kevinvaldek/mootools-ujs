@@ -27,26 +27,28 @@ window.addEvent('domready', function() {
   $$('a[data-remote="true"], input[data-remote="true"]').addEvent('click', rails.handleRemote);
   $$('a[data-method][data-remote!=true]').addEvent('click', function(e) {
     e.preventDefault();
-
-    var form = new Element('form', {
-      method: 'post',
-      action: this.get('href'),
-      styles: { display: 'none' }
-    }).inject(this, 'after');
-
-    var methodInput = new Element('input', {
-      type: 'hidden',
-      name: '_method',
-      value: this.get('data-method')
-    });
-
-    var csrfInput = new Element('input', {
-      type: 'hidden',
-      name: rails.csrf.param,
-      value: rails.csrf.token
-    });
-
-    form.adopt(methodInput, csrfInput).submit();
+    if(rails.confirmed(this)) {
+      var form = new Element('form', {
+        method: 'post',
+        action: this.get('href'),
+        styles: { display: 'none' }
+      }).inject(this, 'after');
+      
+      var methodInput = new Element('input', {
+        type: 'hidden',
+        name: '_method',
+        value: this.get('data-method')
+      });
+      
+      var csrfInput = new Element('input', {
+        type: 'hidden',
+        name: rails.csrf.param,
+        value: rails.csrf.token
+      });
+      
+      form.adopt(methodInput, csrfInput).submit();
+    }
+  });
   });
 });
 
