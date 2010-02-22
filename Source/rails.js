@@ -49,6 +49,9 @@ window.addEvent('domready', function() {
       form.adopt(methodInput, csrfInput).submit();
     }
   });
+  var noMethodNorRemoteConfirm = ':not([data-method]):not([data-remote=true])[data-confirm]';
+  $$('a' + noMethodNorRemoteConfirm, 'input' + noMethodNorRemoteConfirm).addEvent('click', function() {
+    return rails.confirmed(this);
   });
 });
 
