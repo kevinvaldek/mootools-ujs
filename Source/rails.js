@@ -23,41 +23,45 @@ window.addEvent('domready', function() {
     param: rails.getCsrf('param')
   };
 
-  $$('form[data-remote="true"]').addEvent('submit', rails.handleRemote);
-  $$('a[data-remote="true"], input[data-remote="true"]').addEvent('click', rails.handleRemote);
-  $$('a[data-method][data-remote!=true]').addEvent('click', function(e) {
-    e.preventDefault();
-    if(rails.confirmed(this)) {
-      var form = new Element('form', {
-        method: 'post',
-        action: this.get('href'),
-        styles: { display: 'none' }
-      }).inject(this, 'after');
-      
-      var methodInput = new Element('input', {
-        type: 'hidden',
-        name: '_method',
-        value: this.get('data-method')
-      });
-      
-      var csrfInput = new Element('input', {
-        type: 'hidden',
-        name: rails.csrf.param,
-        value: rails.csrf.token
-      });
-      
-      form.adopt(methodInput, csrfInput).submit();
-    }
-  });
-  var noMethodNorRemoteConfirm = ':not([data-method]):not([data-remote=true])[data-confirm]';
-  $$('a' + noMethodNorRemoteConfirm, 'input' + noMethodNorRemoteConfirm).addEvent('click', function() {
-    return rails.confirmed(this);
-  });
+  rails.index();
 });
 
 (function($) {
 
   window.rails = {
+    index: function() {
+      $$('form[data-remote="true"]').addEvent('submit', rails.handleRemote);
+      $$('a[data-remote="true"], input[data-remote="true"]').addEvent('click', rails.handleRemote);
+      $$('a[data-method][data-remote!=true]').addEvent('click', function(e) {
+        e.preventDefault();
+        if(rails.confirmed(this)) {
+          var form = new Element('form', {
+            method: 'post',
+            action: this.get('href'),
+            styles: { display: 'none' }
+          }).inject(this, 'after');
+          
+          var methodInput = new Element('input', {
+            type: 'hidden',
+            name: '_method',
+            value: this.get('data-method')
+          });
+          
+          var csrfInput = new Element('input', {
+            type: 'hidden',
+            name: rails.csrf.param,
+            value: rails.csrf.token
+          });
+          
+          form.adopt(methodInput, csrfInput).submit();
+        }
+      });
+      var noMethodNorRemoteConfirm = ':not([data-method]):not([data-remote=true])[data-confirm]';
+      $$('a' + noMethodNorRemoteConfirm, 'input' + noMethodNorRemoteConfirm).addEvent('click', function() {
+        return rails.confirmed(this);
+      });
+    },
+
     getCsrf: function(name) {
       var meta = document.getElement('meta[name=csrf-' + name + ']');
       return (meta ? meta.get('content') : null);
@@ -131,6 +135,7 @@ window.addEvent('domready', function() {
 
       this.addEvent('success', function() {
         this.el.fireEvent('ajax:success', this.xhr);
+        rails.index();
       });
 
       this.addEvent('complete', function() {
