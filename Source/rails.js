@@ -135,7 +135,6 @@ window.addEvent('domready', function() {
 
       this.addEvent('success', function() {
         this.el.fireEvent('ajax:success', this.xhr);
-        rails.index();
       });
 
       this.addEvent('complete', function() {
