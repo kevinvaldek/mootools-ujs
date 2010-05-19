@@ -29,10 +29,19 @@ window.addEvent('domready', function() {
 (function($) {
 
   window.rails = {
-    applyEvents: function() {
-      $$('form[data-remote="true"]').addEvent('submit', rails.handleRemote);
-      $$('a[data-remote="true"], input[data-remote="true"]').addEvent('click', rails.handleRemote);
-      $$('a[data-method][data-remote!=true]').addEvent('click', function(e) {
+    /**
+     * If el is passed as argument, events will only be applied to
+     * elements within el. Otherwise applied to document body.
+     */
+    applyEvents: function(el) {
+      el = el || document.body;
+      var apply = function(selector, action, callback) {
+        el.getElements(selector).addEvent(action, callback);
+      };
+
+      apply('form[data-remote="true"]', 'submit', rails.handleRemote);
+      apply('a[data-remote="true"], input[data-remote="true"]', 'click', rails.handleRemote);
+      apply('a[data-method][data-remote!=true]', 'click', function(e) {
         e.preventDefault();
         if(rails.confirmed(this)) {
           var form = new Element('form', {
@@ -57,7 +66,7 @@ window.addEvent('domready', function() {
         }
       });
       var noMethodNorRemoteConfirm = ':not([data-method]):not([data-remote=true])[data-confirm]';
-      $$('a' + noMethodNorRemoteConfirm, 'input' + noMethodNorRemoteConfirm).addEvent('click', function() {
+      apply('a' + noMethodNorRemoteConfirm, 'input' + noMethodNorRemoteConfirm, 'click', function() {
         return rails.confirmed(this);
       });
     },
