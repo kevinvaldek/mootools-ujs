@@ -23,13 +23,13 @@ window.addEvent('domready', function() {
     param: rails.getCsrf('param')
   };
 
-  rails.index();
+  rails.applyEvents();
 });
 
 (function($) {
 
   window.rails = {
-    index: function() {
+    applyEvents: function() {
       $$('form[data-remote="true"]').addEvent('submit', rails.handleRemote);
       $$('a[data-remote="true"], input[data-remote="true"]').addEvent('click', rails.handleRemote);
       $$('a[data-method][data-remote!=true]').addEvent('click', function(e) {
