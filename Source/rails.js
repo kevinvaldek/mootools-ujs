@@ -34,7 +34,7 @@ window.addEvent('domready', function() {
      * elements within el. Otherwise applied to document body.
      */
     applyEvents: function(el) {
-      el = el || document.body;
+      el = $(el || document.body);
       var apply = function(selector, action, callback) {
         el.getElements(selector).addEvent(action, callback);
       };
