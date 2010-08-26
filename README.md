@@ -39,3 +39,18 @@ Antoher case is a link element that is not remote, but needs to use DELETE as HT
 This link is hooked with a *click* event that returns false. Instead, a hidden form - including an input named *_method* with value *delete* - is created and submitted with POST.
 
 All hooks are described in the documentation of Rails 3.
+
+Adding events to dynamically injected elements
+----------------------------------------------
+
+Hooks/events are added by default on domready. If you inject any elements afterwards, you can apply events to a container element by using rails.applyEvents($('elementId')).
+
+Example when events are applied to an element that has been updated by XHR:
+
+	#JS
+        new Request.HTML({
+          update: updateElement,
+          onSuccess: function() {
+            rails.applyEvents(updateElement);
+          }
+        });
