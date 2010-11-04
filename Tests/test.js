@@ -22,7 +22,7 @@ Riot.run(function() {
         type: 'submit',
         'data-confirm': 'Sure?'
       });
-      window.confirm = $lambda(true);
+      window.confirm = Function.from(true);
 
       should('return true', rails.confirmed(el)).isTrue();
     });
@@ -31,7 +31,7 @@ Riot.run(function() {
         type: 'submit',
         'data-confirm': 'Sure?'
       });
-      window.confirm = $lambda(false);
+      window.confirm = Function.from(false);
 
       should('return false', rails.confirmed(el)).isFalse();
     });
