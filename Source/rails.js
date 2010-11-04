@@ -160,8 +160,3 @@ window.addEvent('domready', function() {
 
 })(document.id);
 
-/**
- * MooTools selector engine does not match data-* attributes.
- * This will be fixed in 1.3, when the engine is swapped for Slick.
- */
-Selectors.RegExps.combined = (/\.([\w-]+)|\[([\w-]+)(?:([!*^$~|]?=)(["']?)([^\4]*?)\4)?\]|:([\w-]+)(?:\(["']?(.*?)?["']?\)|$)/g);
