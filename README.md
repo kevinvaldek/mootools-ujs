@@ -15,7 +15,7 @@ Given that you already have included MooTools -core in your app, just put rails.
 	#HTML
         <head> 
           <title>MooTooled Rails App</title> 
-          <script type="text/javascript" src="/javascripts/mootools-1.2.4-core.js"></script> 
+          <script type="text/javascript" src="/javascripts/mootools-core-1.3-nocompat.js"></script> 
           <script type="text/javascript" src="/javascripts/rails.js"></script> 
         </head> 
 
