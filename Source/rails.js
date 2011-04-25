@@ -16,16 +16,6 @@ provides:
 ...
 */
 
-window.addEvent('domready', function() {
-
-  rails.csrf = {
-    token: rails.getCsrf('token'),
-    param: rails.getCsrf('param')
-  };
-
-  rails.applyEvents();
-});
-
 (function($) {
 
   window.rails = {
@@ -159,3 +149,12 @@ window.addEvent('domready', function() {
 
 })(document.id);
 
+window.addEvent('domready', function() {
+
+  rails.csrf = {
+    token: rails.getCsrf('token'),
+    param: rails.getCsrf('param')
+  };
+
+  rails.applyEvents();
+});
