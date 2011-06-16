@@ -33,7 +33,10 @@ provides:
       apply('a[data-remote="true"], input[data-remote="true"]', 'click', rails.handleRemote);
       apply('a[data-method][data-remote!=true]', 'click', function(e) {
         e.preventDefault();
-        if(rails.confirmed(this)) {
+        if(rails.confirmed(this) && this.retrieve('unblock',true)) {
+					this.store('unblock',false);
+					this.store.delay(1000,this,['unblock',true]);
+					
           var form = new Element('form', {
             method: 'post',
             action: this.get('href'),
