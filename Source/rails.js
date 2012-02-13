@@ -6,6 +6,7 @@ license: MIT-style
 
 authors:
 - Kevin Valdek
+- Oskar Krawczyk
 
 requires:
   core/1.4: '*'
