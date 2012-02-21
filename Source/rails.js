@@ -128,9 +128,14 @@ window.addEvent('domready', function(){
     },
     
     send: function(options) {
+      var tag = this.el.get('tag');
       this.el.fireEvent('ajax:before');
-      if (this.el.get('tag') === 'form'){
+      if (tag === 'form'){
         this.options.data = this.el;
+      }
+      if (tag==='a'){
+        this.options.data = {};
+        this.options.data[rails.csrf.param] = rails.csrf.token;
       }
       this.parent(options);
       this.el.fireEvent('ajax:after', this.xhr);
