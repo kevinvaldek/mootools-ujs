@@ -69,8 +69,12 @@ window.addEvent('domready', function(){
         }
       });
       var noMethodNorRemoteConfirm = ':not([data-method]):not([data-remote=true])[data-confirm]';
-      apply('a' + noMethodNorRemoteConfirm + ',' + 'input' + noMethodNorRemoteConfirm, 'click', function(){
-        return rails.confirmed(this);
+      apply('a' + noMethodNorRemoteConfirm + ',' + 'input' + noMethodNorRemoteConfirm, 'click', function(event){
+        var confirmed = rails.confirmed(this);
+        if (!confirmed) {
+          event.preventDefault();
+        }
+        return confirmed;
       });
     },
     
