@@ -18,14 +18,14 @@ provides:
 */
 
 (function($){
-  domReadyCallback = function(){
+  var domReadyCallback = function(){
     rails.csrf = {
       token: rails.getCsrf('token'),
       param: rails.getCsrf('param')
     };
   
     rails.applyEvents();
-  }
+  };
   window.addEvent('domready', domReadyCallback);
   document.addEventListener('page:load', domReadyCallback);
 
