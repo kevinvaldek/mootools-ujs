@@ -35,7 +35,7 @@ window.addEvent('domready', function(){
      * elements within el. Otherwise applied to document body.
      */
     applyEvents: function(el){
-      el = $(el || document.body);
+      el = $(el || document);
       var apply = function(selector, action, callback){
         el.addEvent(action + ':relay(' + selector + ')', callback);
       };
